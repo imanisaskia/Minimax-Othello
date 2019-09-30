@@ -42,13 +42,13 @@ public class State {
 
     /** ----- METHODS ----- */
     /** Adds the new piece to tile i,j and pass turn to next player*/
-    public void changeState(int i, int j) {
+    public void changeState(tuple t) {
         /** If board index, add new piece to i,j */
-        if ((i > 0 && i < 9) && (j > 0 && j < 9)) {
-            board[i][j] = Integer.toString(turn);
+        if ((t.i > 0 && t.i < 9) && (t.j > 0 && t.j < 9)) {
+            board[t.i][t.j] = Integer.toString(turn);
         }
         /** If 9,9 game is over */
-        if (i == 9 && j == 9) {
+        if (t.i == 9 && t.j == 9) {
             GAME_OVER = true;
         }
 
