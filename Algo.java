@@ -63,21 +63,27 @@ public class Algo {
     /** Generates minimax move from set of legal moves */
     public static tuple genMinimaxMove(State s, boolean isPlayer) {
       tuple legal_moves[] = genLegalMoves(s);
+      
+      if (legal_moves.length == 0) {
+        tuple hasil = new tuple(9,9);
+        return hasil;
+      }
+
       int alpha = Integer.MIN_VALUE;
       int beta = Integer.MAX_VALUE;      
 
       return legal_moves[minimax(s, 2, isPlayer, alpha, beta).i];
     }
 
-    private static void printBoard(String[][] board) {
-      for (int i = 1; i <= 8; i++){
-        for (int j = 1; j <= 8; j++){
-          //System.out.println(Integer.toString(i) + " " + Integer.toString(j) + " " + state[i][j]);
-          System.out.print(board[i][j] + " ");
-        }
-        System.out.println();
-      }
-    }
+    // private static void printBoard(String[][] board) {
+    //   for (int i = 1; i <= 8; i++){
+    //     for (int j = 1; j <= 8; j++){
+    //       //System.out.println(Integer.toString(i) + " " + Integer.toString(j) + " " + state[i][j]);
+    //       System.out.print(board[i][j] + " ");
+    //     }
+    //     System.out.println();
+    //   }
+    // }
 
     private static tuple minimax(State curr_state, int depth, boolean isPlayer, int alpha, int beta) {
         tuple move = new tuple(0,0);
@@ -188,9 +194,11 @@ public class Algo {
           if (curr_state.getBoardIJ(i,j).equals(checking_color)) {  /* Cek apakah warnanya hitam/putih */
             if (is_corner(coordinate)) {
               score += 50;
+              System.out.println("MASUK UJUNG");
             }
             else if (is_vertices(coordinate)) {
               score += 20;
+              System.out.println("MASUK PINGGIR");
             }
             else {
               score += 1;
