@@ -18,35 +18,37 @@ public class Algo {
         //System.out.println(Integer.toString(s.getTurn()));
         for (int i = 1; i < 9; i++) {
             for (int j = 1; j < 9; j++) {
-                tuple t = new tuple(i, j);    
-                
-                if (s.isConnected(t)) {
-                    tuple up_end = s.findALine(t, "up");
-                    tuple upright_end = s.findALine(t, "up-right");
-                    tuple upleft_end = s.findALine(t, "up-left");
-                    tuple right_end = s.findALine(t, "right");
-                    tuple left_end = s.findALine(t, "left");
-                    tuple down_end = s.findALine(t, "down");
-                    tuple downright_end = s.findALine(t, "down-right");
-                    tuple downleft_end = s.findALine(t, "down-left");
+                if (s.getBoardIJ(i, j).equals("-")) {
+                    tuple t = new tuple(i, j);
 
-                    //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is connected");
-                    /** If there is a line from t to any direction, but not directly next to t */
-                    if (((up_end.i != 0 && up_end.j != 0) && (up_end.i - t.i != 1 && up_end.j - t.j != 1 && up_end.i - t.i != -1 && up_end.j - t.j != -1))
-                    || ((upright_end.i != 0 && upright_end.j != 0) && (upright_end.i - t.i != 1 && upright_end.j - t.j != 1 && upright_end.i - t.i != -1 && upright_end.j - t.j != -1))
-                    || ((upleft_end.i != 0 && upleft_end.j != 0) && (upleft_end.i - t.i != 1 && upleft_end.j - t.j != 1 && upleft_end.i - t.i != -1 && upleft_end.j - t.j != -1))
-                    || ((right_end.i != 0 && right_end.j != 0) && (right_end.i - t.i != 1 && right_end.j - t.j != 1 && right_end.i - t.i != -1 && right_end.j - t.j != -1))
-                    || ((left_end.i != 0 && left_end.j != 0) && (left_end.i - t.i != 1 && left_end.j - t.j != 1 && left_end.i - t.i != -1 && left_end.j - t.j != -1))
-                    || ((down_end.i != 0 && down_end.j != 0) && (down_end.i - t.i != 1 && down_end.j - t.j != 1 && down_end.i - t.i != -1 && down_end.j - t.j != -1))
-                    || ((downright_end.i != 0 && downright_end.j != 0) && (downright_end.i - t.i != 1 && downright_end.j - t.j != 1 && downright_end.i - t.i != -1 && downright_end.j - t.j != -1))
-                    || ((downleft_end.i != 0 && downleft_end.j != 0) && (downleft_end.i - t.i != 1 && downleft_end.j - t.j != 1 && downleft_end.i - t.i != -1 && downleft_end.j - t.j != -1))
-                    ) {
-                        //System.out.println("Added (" + Integer.toString(t.i) + "," + Integer.toString(t.j) +")");
-                        //System.console().readLine();
-                        list.add(t);
+                    if (s.isConnected(t)) {
+                        tuple up_end = s.findALine(t, "up");
+                        tuple upright_end = s.findALine(t, "up-right");
+                        tuple upleft_end = s.findALine(t, "up-left");
+                        tuple right_end = s.findALine(t, "right");
+                        tuple left_end = s.findALine(t, "left");
+                        tuple down_end = s.findALine(t, "down");
+                        tuple downright_end = s.findALine(t, "down-right");
+                        tuple downleft_end = s.findALine(t, "down-left");
+
+                        //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is connected");
+                        /** If there is a line from t to any direction, but not directly next to t */
+                        if (((up_end.i != 0 && up_end.j != 0) && (up_end.i - t.i != 1 && up_end.j - t.j != 1 && up_end.i - t.i != -1 && up_end.j - t.j != -1))
+                        || ((upright_end.i != 0 && upright_end.j != 0) && (upright_end.i - t.i != 1 && upright_end.j - t.j != 1 && upright_end.i - t.i != -1 && upright_end.j - t.j != -1))
+                        || ((upleft_end.i != 0 && upleft_end.j != 0) && (upleft_end.i - t.i != 1 && upleft_end.j - t.j != 1 && upleft_end.i - t.i != -1 && upleft_end.j - t.j != -1))
+                        || ((right_end.i != 0 && right_end.j != 0) && (right_end.i - t.i != 1 && right_end.j - t.j != 1 && right_end.i - t.i != -1 && right_end.j - t.j != -1))
+                        || ((left_end.i != 0 && left_end.j != 0) && (left_end.i - t.i != 1 && left_end.j - t.j != 1 && left_end.i - t.i != -1 && left_end.j - t.j != -1))
+                        || ((down_end.i != 0 && down_end.j != 0) && (down_end.i - t.i != 1 && down_end.j - t.j != 1 && down_end.i - t.i != -1 && down_end.j - t.j != -1))
+                        || ((downright_end.i != 0 && downright_end.j != 0) && (downright_end.i - t.i != 1 && downright_end.j - t.j != 1 && downright_end.i - t.i != -1 && downright_end.j - t.j != -1))
+                        || ((downleft_end.i != 0 && downleft_end.j != 0) && (downleft_end.i - t.i != 1 && downleft_end.j - t.j != 1 && downleft_end.i - t.i != -1 && downleft_end.j - t.j != -1))
+                        ) {
+                            //System.out.println("Added (" + Integer.toString(t.i) + "," + Integer.toString(t.j) +")");
+                            //System.console().readLine();
+                            list.add(t);
+                        }
+                    } else {
+                        //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is not connected");
                     }
-                } else {
-                    //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is not connected");
                 }
             }
         }
