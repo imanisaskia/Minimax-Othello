@@ -130,8 +130,8 @@ public class Algo {
         checking_color = "1";
       }
       
-      for (int i = 1; i < 8; i++) {
-        for (int j = 1; j < 8; j++) {
+      for (int i = 1; i <= 8; i++) {
+        for (int j = 1; j <= 8; j++) {
           coordinate.i = i;
           coordinate.j = j;
           if (curr_state.getBoardIJ(i,j) == checking_color) { /* Cek apakah warnanya hitam/putih */
