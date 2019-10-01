@@ -31,7 +31,7 @@ public class Algo {
                     || ((s.findALine(t, "down-right").i != 0 && s.findALine(t, "down-right").j != 0) && (s.findALine(t, "down-right").i - t.i != 1 && s.findALine(t, "down-right").j - t.j != 1 && s.findALine(t, "down-right").i - t.i != -1 && s.findALine(t, "down-right").j - t.j != -1))
                     || ((s.findALine(t, "down-left").i != 0 && s.findALine(t, "down-left").j != 0) && (s.findALine(t, "down-left").i - t.i != 1 && s.findALine(t, "down-left").j - t.j != 1 && s.findALine(t, "down-left").i - t.i != -1 && s.findALine(t, "down-left").j - t.j != -1))
                     ) {
-                        System.out.println("Added (" + Integer.toString(t.i) + "," + Integer.toString(t.j) +")");
+                        // System.out.println("Added (" + Integer.toString(t.i) + "," + Integer.toString(t.j) +")");
                         System.console().readLine();
                         list.add(t);
                     }
@@ -60,8 +60,12 @@ public class Algo {
     public static tuple genMinimaxMove(State s, boolean isPlayer) {
       int alpha = Integer.MIN_VALUE;
       int beta = Integer.MAX_VALUE;
+      
+      System.out.println("GENMINIMAX MASUK");
 
       minimax(s, 2, isPlayer, alpha, beta);
+
+      System.out.println("MINIMAX FINISH");
 
       return best_coordinate;
     }
@@ -69,53 +73,76 @@ public class Algo {
     private static int minimax(State curr_state, int depth, boolean isPlayer, int alpha, int beta) {
         tuple move = new tuple(0,0);
         tuple legal_moves[] = genLegalMoves(curr_state);
-        int n_legal_moves = legal_moves.length;
-        int best_move_score;
+        // int n_legal_moves = legal_moves.length;
+        // int best_move_score;
+        System.out.println("MINIMAX MASUK");
+        // System.out.println("panjang legal move = " + n_legal_moves);
+        System.out.println(Integer.toString(move.i) + "," + Integer.toString(move.j));
 
         if (depth == 0) { /**initiation**/
           System.out.println("Masuk DEPTH == 0");
           return evaluation(curr_state, isPlayer);
         }
+        else {
+          System.out.println("DEPTH != 0");
+        }
         
-        if (isPlayer) { /** opponent's move **/
-          best_move_score = Integer.MIN_VALUE;
-          for (int i = 0; i < n_legal_moves; i++) {
-            move = legal_moves[i];
-            State new_state = new State(curr_state);
-            new_state.changeState(move);
-            int score = minimax(new_state, depth-1, !isPlayer, alpha, beta);
-            if (score > best_move_score) {
-              best_move_score = score;
-              setBestCoordinate(move.i, move.j);
-            }
-            System.out.println("Masuk isPlayer Minimax");
-            System.out.println("best_move_score = " + best_move_score);
-            set_alpha(alpha, best_move_score); /** alpha beta pruning */
-            if (beta <= alpha) {
-              break; /** pruning */
-            }
-          }
-        }
-        else { /** bot's move **/
-          best_move_score = Integer.MAX_VALUE;
-          for (int i = 0; i < n_legal_moves; i++) {
-            move = legal_moves[i];
-            State new_state = new State(curr_state);
-            new_state.changeState(move);
-            int score = minimax(new_state, depth-1, !isPlayer, alpha, beta);
-            if (score < best_move_score) {
-              best_move_score = score;
-              setBestCoordinate(move.i, move.j);
-            }
-            System.out.println("Masuk NOT isPlayer Minimax");
-            System.out.println("best_move_score = " + best_move_score);
-            set_beta(beta, best_move_score); /** alpha beta pruning */
-            if (beta <= alpha) {
-              break; /** pruning */
-            }
-          }
-        }
-        return best_move_score;
+        // if (n_legal_moves == 0) {
+        //   System.out.println("LEGAL MOVE == 0");
+        //   if (isPlayer) {
+        //     return Integer.MIN_VALUE;
+        //   }
+        //   else {
+        //     return Integer.MAX_VALUE;
+        //   }
+        // }
+
+        // if (isPlayer) { /** opponent's move **/
+        //   best_move_score = Integer.MIN_VALUE;
+        //   System.out.println("Masuk isPlayer Minimax");
+        //   for (int i = 0; i < n_legal_moves; i++) {
+        //     move = legal_moves[i];
+        //     State new_state = new State(curr_state);
+        //     new_state.changeState(move);
+        //     int score = minimax(new_state, depth-1, !isPlayer, alpha, beta);
+        //     if (score > best_move_score) {
+        //       best_move_score = score;
+        //       setBestCoordinate(move.i, move.j);
+        //     }
+        //     System.out.println("best_move_score = " + best_move_score);
+        //     set_alpha(alpha, best_move_score); /** alpha beta pruning */
+        //     System.out.println(Integer.toString(move.i) + "," + Integer.toString(move.j));
+        //     if (beta <= alpha) {
+        //       break; /** pruning */
+        //     }
+        //   }
+        // }
+        // else if (!isPlayer) { /** bot's move **/
+        //   best_move_score = Integer.MAX_VALUE;
+        //   System.out.println("Masuk NOT isPlayer Minimax");
+        //   for (int i = 0; i < n_legal_moves; i++) {
+        //     move = legal_moves[i];
+        //     State new_state = new State(curr_state);
+        //     new_state.changeState(move);
+        //     int score = minimax(new_state, depth-1, !isPlayer, alpha, beta);
+        //     if (score < best_move_score) {
+        //       best_move_score = score;
+        //       setBestCoordinate(move.i, move.j);
+        //     }
+        //     System.out.println("best_move_score = " + best_move_score);
+        //     set_beta(beta, best_move_score); /** alpha beta pruning */
+        //     System.out.println(Integer.toString(move.i) + "," + Integer.toString(move.j));
+        //     if (beta <= alpha) {
+        //       break; /** pruning */
+        //     }
+        //   }
+        // }
+        // else {
+        //   best_move_score = 0;
+        //   System.out.println("GA MASUK isPLAYER && NOT ISPLAYER");
+        // }
+        // return best_move_score;
+        return 0;
     }
 
     private static void set_beta(int beta, int best_score) {
