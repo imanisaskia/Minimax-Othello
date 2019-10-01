@@ -26,6 +26,12 @@ public class State {
         board[5][4] = "1";
     }
 
+    public State(State s) {
+        GAME_OVER = s.GAME_OVER;
+        turn = s.turn;
+        board = s.board;
+    }
+
     /** ----- GETTERS ----- */
     
     public boolean isGameOver() {
@@ -41,12 +47,117 @@ public class State {
     }
 
     /** ----- METHODS ----- */
+    /** Finds piece's complement from a tuple to a certain direction; returns 0,0 if none */
+    public tuple findALine(tuple t, String direction) {
+        int inc_i, inc_j;
+
+        if (direction == "up" || direction == "up-right" || direction == "up-left") {
+            inc_i = -1;
+        } else if (direction == "down" || direction == "down-right" || direction == "down-left") {
+            inc_i = 1;
+        } else {
+            inc_i = 0;
+        }
+
+        if (direction == "right" || direction == "up-right" || direction == "down-right") {
+            inc_j = 1;
+        } else if (direction == "left" || direction == "up-left" || direction == "down-left") {
+            inc_j = -1;
+        } else {
+            inc_j = 0;
+        }
+
+        tuple result = new tuple(0,0);
+        int i = t.i + inc_i;
+        int j = t.j + inc_j;
+        while ((i > 0 && i < 9) && (j > 0 && j < 9)) {
+            if (board[i][j] == Integer.toString(turn)) {
+                result.i = i;
+                result.j = j;
+                break;
+            }
+            i += inc_i;
+            j += inc_j;
+        }
+
+        return result;
+    }
+    
+    private void flipPieces(tuple from, tuple to) {
+        int inc_i, inc_j;
+
+        if (from.i > to.i) {
+            inc_i = -1;
+        } else if (from.i < to.i) {
+            inc_i = 1;
+        } else {
+            inc_i = 0;
+        }
+
+        if (from.j > to.j) {
+            inc_j = -1;
+        } else if (from.j < to.j) {
+            inc_j = 1;
+        } else {
+            inc_j = 0;
+        }
+
+        int i = from.i;
+        int j = from.j;
+        while (i != to.i && j != to.j) {
+            board[i][j] = Integer.toString(turn);
+            i += inc_i;
+            j += inc_j;
+        }
+    }
+    
     /** Adds the new piece to tile i,j and pass turn to next player*/
     public void changeState(tuple t) {
         /** If board index, add new piece to i,j */
         if ((t.i > 0 && t.i < 9) && (t.j > 0 && t.j < 9)) {
             board[t.i][t.j] = Integer.toString(turn);
+
+            tuple up_end = findALine(t, "up");
+            if (up_end.i != 0 && up_end.j != 0) {
+                flipPieces(t, up_end);
+            }
+            
+            tuple upright_end = findALine(t, "up-right");
+            if (upright_end.i != 0 && upright_end.j != 0) {
+                flipPieces(t, upright_end);
+            }
+
+            tuple upleft_end = findALine(t, "up-left");
+            if (upleft_end.i != 0 && upleft_end.j != 0) {
+                flipPieces(t, upleft_end);
+            }
+
+            tuple right_end = findALine(t, "right");
+            if (right_end.i != 0 && right_end.j != 0) {
+                flipPieces(t, right_end);
+            }
+
+            tuple left_end = findALine(t, "left");
+            if (left_end.i != 0 && left_end.j != 0) {
+                flipPieces(t, left_end);
+            }
+
+            tuple down_end = findALine(t, "down");
+            if (down_end.i != 0 && down_end.j != 0) {
+                flipPieces(t, down_end);
+            }
+
+            tuple downright_end = findALine(t, "down-right");
+            if (downright_end.i != 0 && downright_end.j != 0) {
+                flipPieces(t, downright_end);
+            }
+
+            tuple downleft_end = findALine(t, "down-left");
+            if (downleft_end.i != 0 && downleft_end.j != 0) {
+                flipPieces(t, downleft_end);
+            }
         }
+
         /** If 9,9 game is over */
         if (t.i == 9 && t.j == 9) {
             GAME_OVER = true;
