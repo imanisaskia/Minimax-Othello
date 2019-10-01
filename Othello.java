@@ -44,9 +44,13 @@ public class Othello extends JFrame implements ActionListener{
 		background.setPreferredSize(new Dimension(500,400));
 		background.setLayout(new BorderLayout());
 
-		JLabel titleLabel = new JLabel(new ImageIcon(this.getClass().getResource("background.jpg")));
+		JLabel titleLabel = new JLabel(new ImageIcon(this.getClass().getResource("othello title.png")));
 		titleLabel.setPreferredSize(new Dimension(500, 200));
 		background.add(titleLabel, BorderLayout.PAGE_START);
+
+		JLabel titleLogo = new JLabel(new ImageIcon(this.getClass().getResource("background.jpg")));
+		titleLogo.setPreferredSize(new Dimension(500, 200));
+		background.add(titleLabel, BorderLayout.CENTER);
 
 		JPanel titleContent = new JPanel();
 		titleContent.add(background); // Halo beb // 
@@ -175,8 +179,6 @@ public class Othello extends JFrame implements ActionListener{
 			int iBox = boxNum / 10;
 			int jBox = boxNum % 10;
 			tuple chosen = new tuple(iBox, jBox);
-			
-			legalMoves = Algo.genLegalMoves(gameState);
 			if (isMoveAllowed(chosen, legalMoves)){
 				gameState.changeState(new tuple(iBox, jBox));  /** update state from user input */
 				updateBoardPiece(gameState.getBoard()); /** update boardUI */
@@ -187,15 +189,30 @@ public class Othello extends JFrame implements ActionListener{
 					switch (bgmode.getSelection().getActionCommand()){
 						case ("minimax"):
 							move = Algo.genMinimaxMove(gameState, gameState.getTurn() == 0);
-							//System.out.println(Integer.toString(move.i) + Integer.toString(move.j));
+							System.out.println(Integer.toString(move.i) + Integer.toString(move.j));
 							gameState.changeState(move);
 							updateBoardPiece(gameState.getBoard());
 							legalMoves = Algo.genLegalMoves(gameState);
+							nextMoveHint(legalMoves);
+							if (legalMoves.length == 0 ){
+								move = new tuple(9,9);
+								gameState.changeState(move);
+								updateBoardPiece(gameState.getBoard());
+								legalMoves = Algo.genLegalMoves(gameState);
+								nextMoveHint(legalMoves);
+							}
 							break;
 						case ("random"):
 							move = Algo.genRandomMove(gameState);
 							gameState.changeState(move);
 							updateBoardPiece(gameState.getBoard());
+							if (legalMoves.length == 0 ){
+								move = new tuple(9,9);
+								gameState.changeState(move);
+								updateBoardPiece(gameState.getBoard());
+								legalMoves = Algo.genLegalMoves(gameState);
+								nextMoveHint(legalMoves);
+							}
 							break;
 					}
 				} else { /** game over */
@@ -245,9 +262,7 @@ public class Othello extends JFrame implements ActionListener{
 	}
 
 	public void nextMoveHint(tuple[] legalMoves){
-		System.out.println("test");
 		for (int i = 0; i < legalMoves.length; i++ ){
-			System.out.println("ini i : " + i);
 			tuple box = legalMoves[i];
 			buttons[box.i][box.j].setIcon(iconShadow);
 		}
