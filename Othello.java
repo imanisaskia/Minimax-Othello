@@ -206,6 +206,8 @@ public class Othello extends JFrame implements ActionListener{
 							move = Algo.genRandomMove(gameState);
 							gameState.changeState(move);
 							updateBoardPiece(gameState.getBoard());
+							legalMoves = Algo.genLegalMoves(gameState);
+							nextMoveHint(legalMoves);
 							if (legalMoves.length == 0 ){
 								move = new tuple(9,9);
 								gameState.changeState(move);
