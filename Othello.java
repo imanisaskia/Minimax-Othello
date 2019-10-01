@@ -166,7 +166,7 @@ public class Othello extends JFrame implements ActionListener{
 				updateBoardPiece(gameState.getBoard());
 				legalMoves = Algo.genLegalMoves(gameState);
 				if (bgmode.getSelection().getActionCommand() == "bots"){
-					//fungsi bots vs bots
+					mainBots();
 				} else {
 					nextMoveHint(legalMoves);
 				}
@@ -282,7 +282,21 @@ public class Othello extends JFrame implements ActionListener{
 	}
 
 	public void mainBots(){
-		//disable all buttons
+		try {
+			while (!gameState.isGameOver()){
+				Thread.sleep(5000);
+				tuple move;
+				move = Algo.genMinimaxMove(gameState, gameState.getTurn() == 0);
+				gameState.changeState(move);
+				updateBoardPiece(gameState.getBoard());
+				Thread.sleep(2000);
+				move = Algo.genRandomMove(gameState);
+				gameState.changeState(move);
+				updateBoardPiece(gameState.getBoard());
+			}
+		} catch(InterruptedException ex){
+			Thread.currentThread().interrupt();
+		}
 	}
 
 
