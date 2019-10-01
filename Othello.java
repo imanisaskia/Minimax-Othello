@@ -45,12 +45,12 @@ public class Othello extends JFrame implements ActionListener{
 		background.setLayout(new BorderLayout());
 
 		JLabel titleLabel = new JLabel(new ImageIcon(this.getClass().getResource("othello title.png")));
-		titleLabel.setPreferredSize(new Dimension(500, 200));
+		titleLabel.setPreferredSize(new Dimension(500, 100));
 		background.add(titleLabel, BorderLayout.PAGE_START);
 
 		JLabel titleLogo = new JLabel(new ImageIcon(this.getClass().getResource("background.jpg")));
 		titleLogo.setPreferredSize(new Dimension(500, 200));
-		background.add(titleLabel, BorderLayout.CENTER);
+		background.add(titleLogo, BorderLayout.CENTER);		
 
 		JPanel titleContent = new JPanel();
 		titleContent.add(background); // Halo beb // 
