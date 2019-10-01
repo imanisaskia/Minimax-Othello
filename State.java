@@ -1,5 +1,6 @@
 public class State {
     /** ----- VARIABLES ----- */
+    private boolean SKIPPED_ONCE;
     private boolean GAME_OVER;                      /** game state */
     private int turn;                               /** 1 = white, 0 = black */
     private String board[][] = new String[9][9];
@@ -160,11 +161,12 @@ public class State {
             if (downleft_end.i != 0 && downleft_end.j != 0) {
                 flipPieces(t, downleft_end);
             }
-        }
-
-        /** If 9,9 game is over */
-        if (t.i == 9 && t.j == 9) {
-            GAME_OVER = true;
+        } else {
+            if (!SKIPPED_ONCE) {
+                SKIPPED_ONCE = true;
+            } else {
+                GAME_OVER = true;
+            }
         }
 
         /** Pass turn to next player */
