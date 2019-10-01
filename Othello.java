@@ -186,10 +186,10 @@ public class Othello extends JFrame implements ActionListener{
 					switch (bgmode.getSelection().getActionCommand()){
 						case ("minimax"):
 							move = Algo.genMinimaxMove(gameState, gameState.getTurn() == 0);
-							System.out.println(Integer.toString(move.i) + Integer.toString(move.j));
+							//System.out.println(Integer.toString(move.i) + Integer.toString(move.j));
 							gameState.changeState(move);
 							updateBoardPiece(gameState.getBoard());
-							
+							legalMoves = Algo.genLegalMoves(gameState);
 							break;
 						case ("random"):
 							move = Algo.genRandomMove(gameState);
