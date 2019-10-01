@@ -75,9 +75,10 @@ public class Algo {
       }
 
       int alpha = Integer.MIN_VALUE;
-      int beta = Integer.MAX_VALUE;      
-
-      return legal_moves[minimax(s, 2, isPlayer, alpha, beta).i];
+      int beta = Integer.MAX_VALUE;    
+      System.out.println(" ");  
+      System.out.println("Skor max : " + minimax(s, 3, isPlayer, alpha, beta).j);
+      return legal_moves[minimax(s, 5, isPlayer, alpha, beta).i];
     }
 
     // private static void printBoard(String[][] board) {
@@ -92,10 +93,6 @@ public class Algo {
 
     private static tuple minimax(State curr_state, int depth, boolean isPlayer, int alpha, int beta) {
         tuple move = new tuple(0,0);
-        tuple legal_moves[] = genLegalMoves(curr_state);
-        int n_legal_moves = legal_moves.length;
-        int best_move_score;
-        int index_best_move;
         tuple hasil = new tuple(0,0);
         // System.out.println("-----------------------------------------------");
         // System.out.println("panjang legal move = " + n_legal_moves);
@@ -106,19 +103,21 @@ public class Algo {
           return hasil;
         }
         
-        if (n_legal_moves == 0) {
-          if (isPlayer) {
-            hasil.j = Integer.MIN_VALUE;
-            return hasil;
-          }
-          else {
-            hasil.j = Integer.MAX_VALUE;
-            return hasil;
-          }
-        }
+        // if (n_legal_moves == 0) {
+        //   if (isPlayer) {
+        //     hasil.j = Integer.MIN_VALUE;
+        //     return hasil;
+        //   }
+        //   else {
+        //     hasil.j = Integer.MAX_VALUE;
+        //     return hasil;
+        //   }
+        // }
 
         if (isPlayer) { /** opponent's move **/
-          best_move_score = Integer.MIN_VALUE;
+          hasil.j = Integer.MIN_VALUE;
+          tuple legal_moves[] = genLegalMoves(curr_state);
+          int n_legal_moves = legal_moves.length;
           for (int i = 0; i < n_legal_moves; i++) {
             move = legal_moves[i];
             State new_state = new State(curr_state);
@@ -128,14 +127,12 @@ public class Algo {
             // System.out.println("NEW STATE BOARD CHANGED ======>>>");
             // printBoard(new_state.getBoard());
             int score = minimax(new_state, depth-1, !isPlayer, alpha, beta).j;
-            if (score > best_move_score) {
-              best_move_score = score;
-              hasil.j = best_move_score;
-              index_best_move = i;
-              hasil.i = index_best_move; 
+            if (score > hasil.j) {
+              hasil.j = score;
+              hasil.i = i; 
             }
             // System.out.println("best_move_score = " + best_move_score);
-            set_alpha(alpha, best_move_score); /** alpha beta pruning */
+            set_alpha(alpha, hasil.j); /** alpha beta pruning */
             // System.out.println("Player : " + Integer.toString(move.i) + "," + Integer.toString(move.j));
             if (beta <= alpha) {
               break; /** pruning */
@@ -143,20 +140,20 @@ public class Algo {
           }
         }
         else if (!isPlayer) { /** bot's move **/
-          best_move_score = Integer.MAX_VALUE;
+          hasil.j = Integer.MAX_VALUE;
+          tuple legal_moves[] = genLegalMoves(curr_state);
+          int n_legal_moves = legal_moves.length;
           for (int i = 0; i < n_legal_moves; i++) {
             move = legal_moves[i];
             State new_state = new State(curr_state);
             new_state.changeState(move);
             int score = minimax(new_state, depth-1, !isPlayer, alpha, beta).j;
-            if (score < best_move_score) {
-              best_move_score = score;
-              hasil.j = best_move_score;
-              index_best_move = i;
-              hasil.i = index_best_move;         
+            if (score < hasil.j) {
+              hasil.j = score;
+              hasil.i = i;         
             }
             // System.out.println("best_move_score = " + best_move_score);
-            set_beta(beta, best_move_score); /** alpha beta pruning */
+            set_beta(beta, hasil.j); /** alpha beta pruning */
             // System.out.println("Bot : " + Integer.toString(move.i) + "," + Integer.toString(move.j));
             if (beta <= alpha) {
               break; /** pruning */
@@ -199,11 +196,9 @@ public class Algo {
           if (curr_state.getBoardIJ(i,j).equals(checking_color)) {  /* Cek apakah warnanya hitam/putih */
             if (is_corner(coordinate)) {
               score += 50;
-              System.out.println("MASUK UJUNG");
             }
             else if (is_vertices(coordinate)) {
               score += 20;
-              System.out.println("MASUK PINGGIR");
             }
             else {
               score += 1;
