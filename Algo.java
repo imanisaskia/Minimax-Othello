@@ -56,8 +56,13 @@ public class Algo {
     /** Generates random move from set of legal moves */
     public static tuple genRandomMove(State s) {
         tuple legal_moves[] = genLegalMoves(s);
-        int random_index = new Random().nextInt(legal_moves.length);
-        return legal_moves[random_index];
+        if (legal_moves.length > 0) {
+            int random_index = new Random().nextInt(legal_moves.length);
+            return legal_moves[random_index];
+        } else {
+            tuple over = new tuple(9,9);
+            return over;
+        }
     }
 
     /** Generates minimax move from set of legal moves */
@@ -94,7 +99,7 @@ public class Algo {
         tuple hasil = new tuple(0,0);
         // System.out.println("-----------------------------------------------");
         // System.out.println("panjang legal move = " + n_legal_moves);
-        System.out.println(Integer.toString(move.i) + "," + Integer.toString(move.j));
+        //System.out.println(Integer.toString(move.i) + "," + Integer.toString(move.j));
 
         if (depth == 0) { /**initiation**/
           hasil.j = evaluation(curr_state, isPlayer);
