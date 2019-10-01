@@ -30,7 +30,11 @@ public class State {
     public State(State s) {
         GAME_OVER = s.GAME_OVER;
         turn = s.turn;
-        board = s.board;
+        for (int i = 1; i < 9; i++) {
+            for (int j = 1; j < 9; j++) {
+                board[i][j] = s.board[i][j];
+            }
+        }
     }
 
     /** ----- GETTERS ----- */
@@ -128,7 +132,7 @@ public class State {
     public tuple findALine(tuple t, String direction) {
         int inc_i, inc_j;
 
-        // System.out.println("Find a line from " + Integer.toString(t.i) + Integer.toString(t.j) + " direction " + direction);
+        //System.out.println("Find a line from " + Integer.toString(t.i) + Integer.toString(t.j) + " direction " + direction);
 
         if (direction == "up" || direction == "up-right" || direction == "up-left") {
             inc_i = -1;
@@ -166,7 +170,7 @@ public class State {
         }
 
         //System.console().readLine();
-        // System.out.println("Result: (" + Integer.toString(result.i) + "," + Integer.toString(result.j) + ")");
+        //System.out.println("Result: (" + Integer.toString(result.i) + "," + Integer.toString(result.j) + ")");
         return result;
     }
     

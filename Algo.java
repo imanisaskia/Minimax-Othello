@@ -2,41 +2,46 @@ import java.util.*;
 
 public class Algo {
 
-    private static tuple best_coordinate = new tuple(0, 0);
-
     /** ----- PRIVATE METHODS ----- */
 
-    private static void setBestCoordinate(int i, int j) {
-      best_coordinate.i = i;
-      best_coordinate.j = j;
-    }
-
+    /** ----- PUBLIC METHODS ----- */
     /** Generates legal moves based on board matrix */
     public static tuple[] genLegalMoves(State s) {
         List<tuple> list = new ArrayList<tuple>(); //no fixed size mentioned
-        System.out.println(Integer.toString(s.getTurn()));
+        //System.out.println(Integer.toString(s.getTurn()));
         for (int i = 1; i < 9; i++) {
             for (int j = 1; j < 9; j++) {
-                tuple t = new tuple(i, j);    
-                
-                if (s.isConnected(t)) {
-                    //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is connected");
-                    /** If there is a line from t to any direction */
-                    if (((s.findALine(t, "up").i != 0 && s.findALine(t, "up").j != 0) && (s.findALine(t, "up").i - t.i != 1 && s.findALine(t, "up").j - t.j != 1 && s.findALine(t, "up").i - t.i != -1 && s.findALine(t, "up").j - t.j != -1))
-                    || ((s.findALine(t, "up-right").i != 0 && s.findALine(t, "up-right").j != 0) && (s.findALine(t, "up-right").i - t.i != 1 && s.findALine(t, "up-right").j - t.j != 1 && s.findALine(t, "up-right").i - t.i != -1 && s.findALine(t, "up-right").j - t.j != -1))
-                    || ((s.findALine(t, "up-left").i != 0 && s.findALine(t, "up-left").j != 0) && (s.findALine(t, "up-left").i - t.i != 1 && s.findALine(t, "up-left").j - t.j != 1 && s.findALine(t, "up-left").i - t.i != -1 && s.findALine(t, "up-left").j - t.j != -1))
-                    || ((s.findALine(t, "right").i != 0 && s.findALine(t, "right").j != 0) && (s.findALine(t, "right").i - t.i != 1 && s.findALine(t, "right").j - t.j != 1 && s.findALine(t, "right").i - t.i != -1 && s.findALine(t, "right").j - t.j != -1))
-                    || ((s.findALine(t, "left").i != 0 && s.findALine(t, "left").j != 0) && (s.findALine(t, "left").i - t.i != 1 && s.findALine(t, "left").j - t.j != 1 && s.findALine(t, "left").i - t.i != -1 && s.findALine(t, "left").j - t.j != -1))
-                    || ((s.findALine(t, "down").i != 0 && s.findALine(t, "down").j != 0) && (s.findALine(t, "down").i - t.i != 1 && s.findALine(t, "down").j - t.j != 1 && s.findALine(t, "down").i - t.i != -1 && s.findALine(t, "down").j - t.j != -1))
-                    || ((s.findALine(t, "down-right").i != 0 && s.findALine(t, "down-right").j != 0) && (s.findALine(t, "down-right").i - t.i != 1 && s.findALine(t, "down-right").j - t.j != 1 && s.findALine(t, "down-right").i - t.i != -1 && s.findALine(t, "down-right").j - t.j != -1))
-                    || ((s.findALine(t, "down-left").i != 0 && s.findALine(t, "down-left").j != 0) && (s.findALine(t, "down-left").i - t.i != 1 && s.findALine(t, "down-left").j - t.j != 1 && s.findALine(t, "down-left").i - t.i != -1 && s.findALine(t, "down-left").j - t.j != -1))
-                    ) {
-                        // System.out.println("Added (" + Integer.toString(t.i) + "," + Integer.toString(t.j) +")");
-                        System.console().readLine();
-                        list.add(t);
+                if (s.getBoardIJ(i, j).equals("-")) {
+                    tuple t = new tuple(i, j);
+
+                    if (s.isConnected(t)) {
+                        tuple up_end = s.findALine(t, "up");
+                        tuple upright_end = s.findALine(t, "up-right");
+                        tuple upleft_end = s.findALine(t, "up-left");
+                        tuple right_end = s.findALine(t, "right");
+                        tuple left_end = s.findALine(t, "left");
+                        tuple down_end = s.findALine(t, "down");
+                        tuple downright_end = s.findALine(t, "down-right");
+                        tuple downleft_end = s.findALine(t, "down-left");
+
+                        //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is connected");
+                        /** If there is a line from t to any direction, but not directly next to t */
+                        if (((up_end.i != 0 && up_end.j != 0) && (up_end.i - t.i != 1 && up_end.j - t.j != 1 && up_end.i - t.i != -1 && up_end.j - t.j != -1))
+                        || ((upright_end.i != 0 && upright_end.j != 0) && (upright_end.i - t.i != 1 && upright_end.j - t.j != 1 && upright_end.i - t.i != -1 && upright_end.j - t.j != -1))
+                        || ((upleft_end.i != 0 && upleft_end.j != 0) && (upleft_end.i - t.i != 1 && upleft_end.j - t.j != 1 && upleft_end.i - t.i != -1 && upleft_end.j - t.j != -1))
+                        || ((right_end.i != 0 && right_end.j != 0) && (right_end.i - t.i != 1 && right_end.j - t.j != 1 && right_end.i - t.i != -1 && right_end.j - t.j != -1))
+                        || ((left_end.i != 0 && left_end.j != 0) && (left_end.i - t.i != 1 && left_end.j - t.j != 1 && left_end.i - t.i != -1 && left_end.j - t.j != -1))
+                        || ((down_end.i != 0 && down_end.j != 0) && (down_end.i - t.i != 1 && down_end.j - t.j != 1 && down_end.i - t.i != -1 && down_end.j - t.j != -1))
+                        || ((downright_end.i != 0 && downright_end.j != 0) && (downright_end.i - t.i != 1 && downright_end.j - t.j != 1 && downright_end.i - t.i != -1 && downright_end.j - t.j != -1))
+                        || ((downleft_end.i != 0 && downleft_end.j != 0) && (downleft_end.i - t.i != 1 && downleft_end.j - t.j != 1 && downleft_end.i - t.i != -1 && downleft_end.j - t.j != -1))
+                        ) {
+                            //System.out.println("Added (" + Integer.toString(t.i) + "," + Integer.toString(t.j) +")");
+                            //System.console().readLine();
+                            list.add(t);
+                        }
+                    } else {
+                        //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is not connected");
                     }
-                } else {
-                    //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is not connected");
                 }
             }
         }
@@ -48,7 +53,6 @@ public class Algo {
         return legal_moves;
     }
 
-    /** ----- PUBLIC METHODS ----- */
     /** Generates random move from set of legal moves */
     public static tuple genRandomMove(State s) {
         tuple legal_moves[] = genLegalMoves(s);
@@ -58,91 +62,103 @@ public class Algo {
 
     /** Generates minimax move from set of legal moves */
     public static tuple genMinimaxMove(State s, boolean isPlayer) {
+      tuple legal_moves[] = genLegalMoves(s);
       int alpha = Integer.MIN_VALUE;
       int beta = Integer.MAX_VALUE;
       
       System.out.println("GENMINIMAX MASUK");
 
-      minimax(s, 2, isPlayer, alpha, beta);
+      System.out.println("GENMINIMAX FINISH");
+      System.out.println("-----------------------------------------------");
+      
 
-      System.out.println("MINIMAX FINISH");
-
-      return best_coordinate;
+      return legal_moves[minimax(s, 2, isPlayer, alpha, beta).i];
     }
 
-    private static int minimax(State curr_state, int depth, boolean isPlayer, int alpha, int beta) {
+    private static void printBoard(String[][] board) {
+      for (int i = 1; i <= 8; i++){
+        for (int j = 1; j <= 8; j++){
+          //System.out.println(Integer.toString(i) + " " + Integer.toString(j) + " " + state[i][j]);
+          System.out.print(board[i][j] + " ");
+        }
+        System.out.println();
+      }
+    }
+
+    private static tuple minimax(State curr_state, int depth, boolean isPlayer, int alpha, int beta) {
         tuple move = new tuple(0,0);
         tuple legal_moves[] = genLegalMoves(curr_state);
-        // int n_legal_moves = legal_moves.length;
-        // int best_move_score;
-        System.out.println("MINIMAX MASUK");
-        // System.out.println("panjang legal move = " + n_legal_moves);
+        int n_legal_moves = legal_moves.length;
+        int best_move_score;
+        int index_best_move;
+        tuple hasil = new tuple(0,0);
+        System.out.println("-----------------------------------------------");
+        System.out.println("panjang legal move = " + n_legal_moves);
         System.out.println(Integer.toString(move.i) + "," + Integer.toString(move.j));
 
         if (depth == 0) { /**initiation**/
-          System.out.println("Masuk DEPTH == 0");
-          return evaluation(curr_state, isPlayer);
-        }
-        else {
-          System.out.println("DEPTH != 0");
+          hasil.j = evaluation(curr_state, isPlayer);
+          return hasil;
         }
         
-        // if (n_legal_moves == 0) {
-        //   System.out.println("LEGAL MOVE == 0");
-        //   if (isPlayer) {
-        //     return Integer.MIN_VALUE;
-        //   }
-        //   else {
-        //     return Integer.MAX_VALUE;
-        //   }
-        // }
+        if (n_legal_moves == 0) {
+          if (isPlayer) {
+            hasil.j = Integer.MIN_VALUE;
+            return hasil;
+          }
+          else {
+            hasil.j = Integer.MAX_VALUE;
+            return hasil;
+          }
+        }
 
-        // if (isPlayer) { /** opponent's move **/
-        //   best_move_score = Integer.MIN_VALUE;
-        //   System.out.println("Masuk isPlayer Minimax");
-        //   for (int i = 0; i < n_legal_moves; i++) {
-        //     move = legal_moves[i];
-        //     State new_state = new State(curr_state);
-        //     new_state.changeState(move);
-        //     int score = minimax(new_state, depth-1, !isPlayer, alpha, beta);
-        //     if (score > best_move_score) {
-        //       best_move_score = score;
-        //       setBestCoordinate(move.i, move.j);
-        //     }
-        //     System.out.println("best_move_score = " + best_move_score);
-        //     set_alpha(alpha, best_move_score); /** alpha beta pruning */
-        //     System.out.println(Integer.toString(move.i) + "," + Integer.toString(move.j));
-        //     if (beta <= alpha) {
-        //       break; /** pruning */
-        //     }
-        //   }
-        // }
-        // else if (!isPlayer) { /** bot's move **/
-        //   best_move_score = Integer.MAX_VALUE;
-        //   System.out.println("Masuk NOT isPlayer Minimax");
-        //   for (int i = 0; i < n_legal_moves; i++) {
-        //     move = legal_moves[i];
-        //     State new_state = new State(curr_state);
-        //     new_state.changeState(move);
-        //     int score = minimax(new_state, depth-1, !isPlayer, alpha, beta);
-        //     if (score < best_move_score) {
-        //       best_move_score = score;
-        //       setBestCoordinate(move.i, move.j);
-        //     }
-        //     System.out.println("best_move_score = " + best_move_score);
-        //     set_beta(beta, best_move_score); /** alpha beta pruning */
-        //     System.out.println(Integer.toString(move.i) + "," + Integer.toString(move.j));
-        //     if (beta <= alpha) {
-        //       break; /** pruning */
-        //     }
-        //   }
-        // }
-        // else {
-        //   best_move_score = 0;
-        //   System.out.println("GA MASUK isPLAYER && NOT ISPLAYER");
-        // }
-        // return best_move_score;
-        return 0;
+        if (isPlayer) { /** opponent's move **/
+          best_move_score = Integer.MIN_VALUE;
+          for (int i = 0; i < n_legal_moves; i++) {
+            move = legal_moves[i];
+            State new_state = new State(curr_state);
+            System.out.println("NEW STATE BOARD ======>>>");
+            printBoard(new_state.getBoard());
+            new_state.changeState(move);
+            System.out.println("NEW STATE BOARD CHANGED ======>>>");
+            printBoard(new_state.getBoard());
+            int score = minimax(new_state, depth-1, !isPlayer, alpha, beta).j;
+            if (score > best_move_score) {
+              best_move_score = score;
+              hasil.j = best_move_score;
+              index_best_move = i;
+              hasil.i = index_best_move; 
+            }
+            System.out.println("best_move_score = " + best_move_score);
+            set_alpha(alpha, best_move_score); /** alpha beta pruning */
+            System.out.println("Player : " + Integer.toString(move.i) + "," + Integer.toString(move.j));
+            if (beta <= alpha) {
+              break; /** pruning */
+            }
+          }
+        }
+        else if (!isPlayer) { /** bot's move **/
+          best_move_score = Integer.MAX_VALUE;
+          for (int i = 0; i < n_legal_moves; i++) {
+            move = legal_moves[i];
+            State new_state = new State(curr_state);
+            new_state.changeState(move);
+            int score = minimax(new_state, depth-1, !isPlayer, alpha, beta).j;
+            if (score < best_move_score) {
+              best_move_score = score;
+              hasil.j = best_move_score;
+              index_best_move = i;
+              hasil.i = index_best_move;         
+            }
+            System.out.println("best_move_score = " + best_move_score);
+            set_beta(beta, best_move_score); /** alpha beta pruning */
+            System.out.println("Bot : " + Integer.toString(move.i) + "," + Integer.toString(move.j));
+            if (beta <= alpha) {
+              break; /** pruning */
+            }
+          }
+        }
+        return hasil;
     }
 
     private static void set_beta(int beta, int best_score) {
