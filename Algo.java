@@ -75,9 +75,9 @@ public class Algo {
       }
 
       int alpha = Integer.MIN_VALUE;
-      int beta = Integer.MAX_VALUE;    
-      System.out.println(" ");  
-      System.out.println("Skor max : " + minimax(s, 3, isPlayer, alpha, beta).j);
+      int beta = Integer.MAX_VALUE;
+      // System.out.println(" ");  
+      // System.out.println("Skor max : " + minimax(s, 3, isPlayer, alpha, beta).j);
       return legal_moves[minimax(s, 5, isPlayer, alpha, beta).i];
     }
 
