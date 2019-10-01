@@ -188,6 +188,9 @@ public class Othello extends JFrame implements ActionListener{
 				gameState.changeState(new tuple(iBox, jBox));  /** update state from user input */
 				updateBoardPiece(gameState.getBoard()); /** update boardUI */
 				System.out.println(gameState.isGameOver());
+				if (isBoardFull(gameState.getBoard())){
+					gameState.setGameOver();
+				}
 				if (!gameState.isGameOver()){ /** not game over = bot's turn */
 					tuple move;
 					System.out.println("Mode nya : " + bgmode.getSelection().getActionCommand());
@@ -199,7 +202,7 @@ public class Othello extends JFrame implements ActionListener{
 							updateBoardPiece(gameState.getBoard());
 							legalMoves = Algo.genLegalMoves(gameState);
 							nextMoveHint(legalMoves);
-							if (legalMoves.length == 0 ){
+							if (legalMoves.length == 0){
 								move = new tuple(9,9);
 								gameState.changeState(move);
 								updateBoardPiece(gameState.getBoard());
@@ -222,6 +225,7 @@ public class Othello extends JFrame implements ActionListener{
 							}
 							break;							
 					}
+					
 				} else { /** game over */
 					this.dispose();
 					setOver();
@@ -300,6 +304,23 @@ public class Othello extends JFrame implements ActionListener{
 			}
 		}
 		return found;
+	}
+
+	public boolean isBoardFull(String[][] state){
+		int i = 1;
+		int j = 1;
+		boolean foundEmpty = false;
+		while (!foundEmpty && i <= boxCount){
+			while (!foundEmpty && j<=boxCount){
+				if (state[i][j].equals("-")){
+					foundEmpty = true;
+				} else {
+					j++;
+				}
+			}
+			i++;
+		}
+		return !foundEmpty;
 	}
 
 	// public void mainBots(){
