@@ -14,8 +14,8 @@ public class Othello extends JFrame implements ActionListener{
 
 	JLabel scoreWhiteLabel, scoreBlackLabel;
 	int scoreWhite, scoreBlack;
-	JPanel boardUI = new JPanel(); /*for game boardUI*/
-	JPanel info = new JPanel(); /*for info about the game states*/
+	JPanel boardUI = new JPanel(); /** for game boardUI */
+	JPanel info = new JPanel(); /** for info about the game states */
 	JFrame title = new JFrame();
 	JFrame over = new JFrame("It's Game Over !");
 	JButton exitButton = new JButton("Exit");
@@ -34,6 +34,7 @@ public class Othello extends JFrame implements ActionListener{
 		othello.setTitle();
 	}
 
+	/** set and show title frame */
 	public void setTitle(){
 		title.setSize(new Dimension(500,600));
 		title.setResizable(false);
@@ -61,6 +62,7 @@ public class Othello extends JFrame implements ActionListener{
 		title.setVisible(true);
 	}
 
+	/** set and show the game frame (board and score) */
 	public void setGameFrame(){
 		setSize(new Dimension (500,600));
 		setResizable(false);
@@ -92,6 +94,7 @@ public class Othello extends JFrame implements ActionListener{
 		setVisible(true);
 	}
 
+	/** set and show the game over frame */
 	public void setOver(){
 		over.setSize(new Dimension(500,600));
 		over.setResizable(false);
@@ -108,8 +111,10 @@ public class Othello extends JFrame implements ActionListener{
 		endGameInfo.setPreferredSize(new Dimension(500,100));
 		endGameInfo.setText("YOU WON !");
 		over.add(endGameInfo, BorderLayout.CENTER);
+		setVisible(true);
 	}
 
+	/** show dialog box with radio button to decide which game play mode */
 	public void setGameOptions(){
 		gameSelections.setLayout(new BorderLayout());
 
@@ -144,9 +149,10 @@ public class Othello extends JFrame implements ActionListener{
 		gameSelections.add(levelOptions, BorderLayout.PAGE_END);
 	}
 
+	/** action performed when button click */
 	public void actionPerformed(ActionEvent e) {
 		String act = e.getActionCommand();
-		if (act == "play"){
+		if (act == "play"){ /** Play button at the title frame get clicked */
 			setGameOptions();
 			int x = JOptionPane.showOptionDialog(null, gameSelections,"Mode and Level" , JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, optionsButtons, optionsButtons[0]);
 			System.out.println(levelChoices.getSelectedItem());
@@ -161,15 +167,15 @@ public class Othello extends JFrame implements ActionListener{
 			}
 		}
 		else 
-		if (act.contains("button")){
+		if (act.contains("button")){ /** boardUI button get clicked */
 			System.out.println(act);
 			int boxNum = Integer.valueOf(act.substring(act.indexOf("n") +1));
 			int iBox = boxNum / 10;
 			int jBox = boxNum % 10;
-			gameState.changeState(new tuple(iBox, jBox));
-			updateBoardPiece(gameState.getBoard());
+			gameState.changeState(new tuple(iBox, jBox));  /** update state from user input */
+			updateBoardPiece(gameState.getBoard()); /** update boardUI */
 			System.out.println(gameState.isGameOver());
-			if (!gameState.isGameOver()){
+			if (!gameState.isGameOver()){ /** not game over = bot's turn */
 				tuple move;
 				System.out.println("Mode nya : " + bgmode.getSelection().getActionCommand());
 				switch (bgmode.getSelection().getActionCommand()){
@@ -185,11 +191,14 @@ public class Othello extends JFrame implements ActionListener{
 						updateBoardPiece(gameState.getBoard());
 						break;
 				}
+			} else { /** game over */
+				setOver();
 			}
 			//unenable button gt ?
 		}
 	}
 
+	/** update boardUI and score */
 	public void updateBoardPiece(String[][] state){
 		for (int i = 1; i <= boxCount; i++){
 			for (int j = 1; j <= boxCount; j++){
@@ -209,6 +218,7 @@ public class Othello extends JFrame implements ActionListener{
 		System.out.println();
 	}
 
+	/**update score */
 	public void updateScore(String[][] state){
 		scoreWhite = 0;
 		scoreBlack = 0;
