@@ -176,6 +176,7 @@ public class Othello extends JFrame implements ActionListener{
 			int jBox = boxNum % 10;
 			tuple chosen = new tuple(iBox, jBox);
 			
+			legalMoves = Algo.genLegalMoves(gameState);
 			if (isMoveAllowed(chosen, legalMoves)){
 				gameState.changeState(new tuple(iBox, jBox));  /** update state from user input */
 				updateBoardPiece(gameState.getBoard()); /** update boardUI */
