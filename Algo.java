@@ -12,23 +12,31 @@ public class Algo {
     }
 
     /** Generates legal moves based on board matrix */
-    private static tuple[] genLegalMoves(State s) {
+    public static tuple[] genLegalMoves(State s) {
         List<tuple> list = new ArrayList<tuple>(); //no fixed size mentioned
-        
+        System.out.println(Integer.toString(s.getTurn()));
         for (int i = 1; i < 9; i++) {
             for (int j = 1; j < 9; j++) {
                 tuple t = new tuple(i, j);    
-                /** If there is a line from t to any direction */
-                if ((s.findALine(t, "up").i != 0 && s.findALine(t, "up").j != 0)
-                || (s.findALine(t, "up-right").i != 0 && s.findALine(t, "up-right").j != 0)
-                || (s.findALine(t, "up-left").i != 0 && s.findALine(t, "up-left").j != 0)
-                || (s.findALine(t, "right").i != 0 && s.findALine(t, "right").j != 0)
-                || (s.findALine(t, "left").i != 0 && s.findALine(t, "left").j != 0)
-                || (s.findALine(t, "down").i != 0 && s.findALine(t, "down").j != 0)
-                || (s.findALine(t, "down-right").i != 0 && s.findALine(t, "down-right").j != 0)
-                || (s.findALine(t, "down-left").i != 0 && s.findALine(t, "down-left").j != 0)
-                ) {
-                    list.add(t);
+                
+                if (s.isConnected(t)) {
+                    //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is connected");
+                    /** If there is a line from t to any direction */
+                    if (((s.findALine(t, "up").i != 0 && s.findALine(t, "up").j != 0) && (s.findALine(t, "up").i - t.i != 1 && s.findALine(t, "up").j - t.j != 1 && s.findALine(t, "up").i - t.i != -1 && s.findALine(t, "up").j - t.j != -1))
+                    || ((s.findALine(t, "up-right").i != 0 && s.findALine(t, "up-right").j != 0) && (s.findALine(t, "up-right").i - t.i != 1 && s.findALine(t, "up-right").j - t.j != 1 && s.findALine(t, "up-right").i - t.i != -1 && s.findALine(t, "up-right").j - t.j != -1))
+                    || ((s.findALine(t, "up-left").i != 0 && s.findALine(t, "up-left").j != 0) && (s.findALine(t, "up-left").i - t.i != 1 && s.findALine(t, "up-left").j - t.j != 1 && s.findALine(t, "up-left").i - t.i != -1 && s.findALine(t, "up-left").j - t.j != -1))
+                    || ((s.findALine(t, "right").i != 0 && s.findALine(t, "right").j != 0) && (s.findALine(t, "right").i - t.i != 1 && s.findALine(t, "right").j - t.j != 1 && s.findALine(t, "right").i - t.i != -1 && s.findALine(t, "right").j - t.j != -1))
+                    || ((s.findALine(t, "left").i != 0 && s.findALine(t, "left").j != 0) && (s.findALine(t, "left").i - t.i != 1 && s.findALine(t, "left").j - t.j != 1 && s.findALine(t, "left").i - t.i != -1 && s.findALine(t, "left").j - t.j != -1))
+                    || ((s.findALine(t, "down").i != 0 && s.findALine(t, "down").j != 0) && (s.findALine(t, "down").i - t.i != 1 && s.findALine(t, "down").j - t.j != 1 && s.findALine(t, "down").i - t.i != -1 && s.findALine(t, "down").j - t.j != -1))
+                    || ((s.findALine(t, "down-right").i != 0 && s.findALine(t, "down-right").j != 0) && (s.findALine(t, "down-right").i - t.i != 1 && s.findALine(t, "down-right").j - t.j != 1 && s.findALine(t, "down-right").i - t.i != -1 && s.findALine(t, "down-right").j - t.j != -1))
+                    || ((s.findALine(t, "down-left").i != 0 && s.findALine(t, "down-left").j != 0) && (s.findALine(t, "down-left").i - t.i != 1 && s.findALine(t, "down-left").j - t.j != 1 && s.findALine(t, "down-left").i - t.i != -1 && s.findALine(t, "down-left").j - t.j != -1))
+                    ) {
+                        System.out.println("Added (" + Integer.toString(t.i) + "," + Integer.toString(t.j) +")");
+                        System.console().readLine();
+                        list.add(t);
+                    }
+                } else {
+                    //System.out.println("(" + Integer.toString(t.i) + "," + Integer.toString(t.j) +") is not connected");
                 }
             }
         }

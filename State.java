@@ -52,9 +52,83 @@ public class State {
     }
 
     /** ----- METHODS ----- */
+    /** Returns true if there is a piece next to the tuple */
+    public boolean isConnected(tuple t) {
+        boolean i_min, i_plus, j_min, j_plus = false;
+
+        if (t.i-1 != 0) {
+            i_min = true;
+        } else {
+            i_min = false;
+        }
+        if (t.i+1 != 9) {
+            i_plus = true;
+        } else {
+            i_plus = false;
+        }
+        if (t.j-1 != 0) {
+            j_min = true;
+        } else {
+            j_min = false;
+        }
+        if (t.j+1 != 9) {
+            j_plus = true;
+        } else {
+            j_plus = false;
+        }
+
+        if (i_min) {
+            if (!board[t.i-1][t.j].equals("-")) {
+                return true;
+            }
+            if (j_plus) {
+                if (!board[t.i-1][t.j+1].equals("-")) {
+                    return true;
+                }
+            }
+            if (j_min) {
+                if (!board[t.i-1][t.j-1].equals("-")) {
+                    return true;
+                }
+            }
+        }
+        
+        if (i_plus) {
+            if (!board[t.i+1][t.j].equals("-")) {
+                return true;
+            }
+            if (j_plus) {
+                if (!board[t.i+1][t.j+1].equals("-")) {
+                    return true;
+                }
+            }
+            if (j_min) {
+                if (!board[t.i+1][t.j-1].equals("-")) {
+                    return true;
+                }
+            }
+        }
+
+        if (j_plus) {
+            if (!board[t.i][t.j+1].equals("-")) {
+                return true;
+            }
+        }
+        if (j_min) {
+            if (!board[t.i][t.j-1].equals("-")) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
     /** Finds piece's complement from a tuple to a certain direction; returns 0,0 if none */
     public tuple findALine(tuple t, String direction) {
         int inc_i, inc_j;
+
+        System.out.println("Find a line from " + Integer.toString(t.i) + Integer.toString(t.j) + " direction " + direction);
 
         if (direction == "up" || direction == "up-right" || direction == "up-left") {
             inc_i = -1;
@@ -75,21 +149,31 @@ public class State {
         tuple result = new tuple(0,0);
         int i = t.i + inc_i;
         int j = t.j + inc_j;
+        //System.out.println(Integer.toString(turn));
         while ((i > 0 && i < 9) && (j > 0 && j < 9)) {
-            if (board[i][j] == Integer.toString(turn)) {
+            if (board[i][j].equals(Integer.toString(turn))) {
+                //System.out.println("match");
                 result.i = i;
                 result.j = j;
                 break;
+            } else if (board[i][j].equals("-")) {
+                break;
+            } else {
+                //System.out.println("Expected " + Integer.toString(turn) + " but get " + board[i][j]);
+                i += inc_i;
+                j += inc_j;
             }
-            i += inc_i;
-            j += inc_j;
         }
 
+        //System.console().readLine();
+        System.out.println("Result: (" + Integer.toString(result.i) + "," + Integer.toString(result.j) + ")");
         return result;
     }
     
     private void flipPieces(tuple from, tuple to) {
         int inc_i, inc_j;
+
+        //System.out.println("Flipping from (" + Integer.toString(from.i) + "," + Integer.toString(from.j) + ") to (" + Integer.toString(to.i) + "," + Integer.toString(to.j) + ")");
 
         if (from.i > to.i) {
             inc_i = -1;
@@ -107,10 +191,18 @@ public class State {
             inc_j = 0;
         }
 
-        int i = from.i;
-        int j = from.j;
-        while (i != to.i && j != to.j) {
-            board[i][j] = Integer.toString(turn);
+        int i = from.i + inc_i;
+        int j = from.j + inc_j;
+        while (i != to.i || j != to.j) {
+            //System.out.println("(" + Integer.toString(i) + "," + Integer.toString(j) + ")");
+
+            if (board[i][j].equals("0")) {
+                //System.out.println("Flipped to 1");
+                board[i][j] = "1";
+            } else {
+                //System.out.println("Flipped to 0");
+                board[i][j] = "0";
+            }
             i += inc_i;
             j += inc_j;
         }
