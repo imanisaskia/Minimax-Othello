@@ -2,14 +2,7 @@ import java.util.*;
 
 public class Algo {
 
-    private static tuple best_coordinate = new tuple(0, 0);   
-
     /** ----- PRIVATE METHODS ----- */
-
-    private static void setBestCoordinate(int i, int j) {
-      best_coordinate.i = i;
-      best_coordinate.j = j;
-    }
 
     /** ----- PUBLIC METHODS ----- */
     /** Generates legal moves based on board matrix */
@@ -69,58 +62,103 @@ public class Algo {
 
     /** Generates minimax move from set of legal moves */
     public static tuple genMinimaxMove(State s, boolean isPlayer) {
+      tuple legal_moves[] = genLegalMoves(s);
       int alpha = Integer.MIN_VALUE;
       int beta = Integer.MAX_VALUE;
+      
+      System.out.println("GENMINIMAX MASUK");
 
-      minimax(s, 3, isPlayer, alpha, beta);
+      System.out.println("GENMINIMAX FINISH");
+      System.out.println("-----------------------------------------------");
+      
 
-      return best_coordinate;
+      return legal_moves[minimax(s, 2, isPlayer, alpha, beta).i];
     }
 
-    private static int minimax(State curr_state, int depth, boolean isPlayer, int alpha, int beta) {
+    private static void printBoard(String[][] board) {
+      for (int i = 1; i <= 8; i++){
+        for (int j = 1; j <= 8; j++){
+          //System.out.println(Integer.toString(i) + " " + Integer.toString(j) + " " + state[i][j]);
+          System.out.print(board[i][j] + " ");
+        }
+        System.out.println();
+      }
+    }
+
+    private static tuple minimax(State curr_state, int depth, boolean isPlayer, int alpha, int beta) {
         tuple move = new tuple(0,0);
         tuple legal_moves[] = genLegalMoves(curr_state);
         int n_legal_moves = legal_moves.length;
         int best_move_score;
+        int index_best_move;
+        tuple hasil = new tuple(0,0);
+        System.out.println("-----------------------------------------------");
+        System.out.println("panjang legal move = " + n_legal_moves);
+        System.out.println(Integer.toString(move.i) + "," + Integer.toString(move.j));
 
         if (depth == 0) { /**initiation**/
-          return evaluation(curr_state, isPlayer);
+          hasil.j = evaluation(curr_state, isPlayer);
+          return hasil;
         }
-        else if (isPlayer) { /** opponent's move **/
+        
+        if (n_legal_moves == 0) {
+          if (isPlayer) {
+            hasil.j = Integer.MIN_VALUE;
+            return hasil;
+          }
+          else {
+            hasil.j = Integer.MAX_VALUE;
+            return hasil;
+          }
+        }
+
+        if (isPlayer) { /** opponent's move **/
           best_move_score = Integer.MIN_VALUE;
           for (int i = 0; i < n_legal_moves; i++) {
             move = legal_moves[i];
             State new_state = new State(curr_state);
+            System.out.println("NEW STATE BOARD ======>>>");
+            printBoard(new_state.getBoard());
             new_state.changeState(move);
-            int score = minimax(new_state, depth-1, !isPlayer, alpha, beta);
+            System.out.println("NEW STATE BOARD CHANGED ======>>>");
+            printBoard(new_state.getBoard());
+            int score = minimax(new_state, depth-1, !isPlayer, alpha, beta).j;
             if (score > best_move_score) {
               best_move_score = score;
-              setBestCoordinate(move.i, move.j);
+              hasil.j = best_move_score;
+              index_best_move = i;
+              hasil.i = index_best_move; 
             }
+            System.out.println("best_move_score = " + best_move_score);
             set_alpha(alpha, best_move_score); /** alpha beta pruning */
+            System.out.println("Player : " + Integer.toString(move.i) + "," + Integer.toString(move.j));
             if (beta <= alpha) {
               break; /** pruning */
             }
           }
         }
-        else { /** bot's move **/
+        else if (!isPlayer) { /** bot's move **/
           best_move_score = Integer.MAX_VALUE;
           for (int i = 0; i < n_legal_moves; i++) {
             move = legal_moves[i];
             State new_state = new State(curr_state);
             new_state.changeState(move);
-            int score = minimax(new_state, depth-1, !isPlayer, alpha, beta);
+            int score = minimax(new_state, depth-1, !isPlayer, alpha, beta).j;
             if (score < best_move_score) {
               best_move_score = score;
-              setBestCoordinate(move.i, move.j);
+              hasil.j = best_move_score;
+              index_best_move = i;
+              hasil.i = index_best_move;         
             }
+            System.out.println("best_move_score = " + best_move_score);
             set_beta(beta, best_move_score); /** alpha beta pruning */
+            System.out.println("Bot : " + Integer.toString(move.i) + "," + Integer.toString(move.j));
             if (beta <= alpha) {
               break; /** pruning */
             }
           }
         }
-        return best_move_score;
+        return hasil;
     }
 
     private static void set_beta(int beta, int best_score) {
@@ -153,7 +191,7 @@ public class Algo {
         for (int j = 1; j <= 8; j++) {
           coordinate.i = i;
           coordinate.j = j;
-          if (curr_state.getBoardIJ(i,j) == checking_color) { /* Cek apakah warnanya hitam/putih */
+          if (curr_state.getBoardIJ(i,j).equals(checking_color)) {  /* Cek apakah warnanya hitam/putih */
             if (is_corner(coordinate)) {
               score += 50;
             }
