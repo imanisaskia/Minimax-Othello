@@ -112,7 +112,7 @@ public class Othello extends JFrame implements ActionListener{
 		JLabel endGameInfo = new JLabel("endGameInfo",SwingConstants.CENTER);
 		//itung spa yang menang trus pake if 
 		endGameInfo.setPreferredSize(new Dimension(500,100));
-		endGameInfo.setText("YOU WON !");
+		endGameInfo.setText("GAME OVER !");
 		over.add(endGameInfo, BorderLayout.CENTER);
 		setVisible(true);
 	}
@@ -166,7 +166,12 @@ public class Othello extends JFrame implements ActionListener{
 				updateBoardPiece(gameState.getBoard());
 				legalMoves = Algo.genLegalMoves(gameState);
 				if (bgmode.getSelection().getActionCommand() == "bots"){
-					mainBots();
+					//mainBots();
+					JButton next = new JButton ("next");
+					next.setActionCommand("btnNext");
+					next.addActionListener(this);
+					info.add(next, BorderLayout.LINE_END);
+					info.repaint();
 				} else {
 					nextMoveHint(legalMoves);
 				}
@@ -215,13 +220,25 @@ public class Othello extends JFrame implements ActionListener{
 								legalMoves = Algo.genLegalMoves(gameState);
 								nextMoveHint(legalMoves);
 							}
-							break;
+							break;							
 					}
 				} else { /** game over */
+					this.dispose();
 					setOver();
 				}
 			}
-			//unenable button gt ?
+		} else 
+		if (act == "btnNext" ){
+			tuple move;
+			if (gameState.getTurn() == 0){
+				move = Algo.genMinimaxMove(gameState, gameState.getTurn() == 0);
+				gameState.changeState(move);
+				updateBoardPiece(gameState.getBoard());
+			} else {
+				move = Algo.genRandomMove(gameState);
+				gameState.changeState(move);
+				updateBoardPiece(gameState.getBoard());
+			}
 		}
 	}
 
@@ -236,12 +253,14 @@ public class Othello extends JFrame implements ActionListener{
 				} else 
 				if (state[i][j].equals("0")){
 					buttons[i][j].setIcon(iconBlackPiece);
+				} else
+				if (state[i][j].equals("-")){
+					buttons[i][j].setIcon(null);
 				}
 			}
 			System.out.println();
 		}
 		updateScore(state);
-		System.out.println();
 		System.out.println();
 	}
 
@@ -283,24 +302,21 @@ public class Othello extends JFrame implements ActionListener{
 		return found;
 	}
 
-	public void mainBots(){
-		try {
-			while (!gameState.isGameOver()){
-				Thread.sleep(5000);
-				tuple move;
-				move = Algo.genMinimaxMove(gameState, gameState.getTurn() == 0);
-				gameState.changeState(move);
-				updateBoardPiece(gameState.getBoard());
-				Thread.sleep(2000);
-				move = Algo.genRandomMove(gameState);
-				gameState.changeState(move);
-				updateBoardPiece(gameState.getBoard());
-			}
-		} catch(InterruptedException ex){
-			Thread.currentThread().interrupt();
-		}
-	}
+	// public void mainBots(){
+	// 	try {
+	// 		//while (!gameState.isGameOver()){
+	// 			tuple move;
+	// 			move = Algo.genMinimaxMove(gameState, gameState.getTurn() == 0);
+	// 			gameState.changeState(move);
+	// 			updateBoardPiece(gameState.getBoard());
+	// 			Thread.sleep(2000);
+	// 			move = Algo.genRandomMove(gameState);
+	// 			gameState.changeState(move);
+	// 			updateBoardPiece(gameState.getBoard());
+	// 		//}
 
-
-
+	// 	} catch(InterruptedException ex){
+	// 		Thread.currentThread().interrupt();
+	// 	}
+	// }
 }
