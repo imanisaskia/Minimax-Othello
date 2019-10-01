@@ -13,7 +13,30 @@ public class Algo {
 
     /** Generates legal moves based on board matrix */
     private static tuple[] genLegalMoves(State s) {
-        tuple legal_moves[] = new tuple[60];
+        List<tuple> list = new ArrayList<tuple>(); //no fixed size mentioned
+        
+        for (int i = 1; i < 9; i++) {
+            for (int j = 1; j < 9; j++) {
+                tuple t = new tuple(i, j);    
+                /** If there is a line from t to any direction */
+                if ((s.findALine(t, "up").i != 0 && s.findALine(t, "up").j != 0)
+                || (s.findALine(t, "up-right").i != 0 && s.findALine(t, "up-right").j != 0)
+                || (s.findALine(t, "up-left").i != 0 && s.findALine(t, "up-left").j != 0)
+                || (s.findALine(t, "right").i != 0 && s.findALine(t, "right").j != 0)
+                || (s.findALine(t, "left").i != 0 && s.findALine(t, "left").j != 0)
+                || (s.findALine(t, "down").i != 0 && s.findALine(t, "down").j != 0)
+                || (s.findALine(t, "down-right").i != 0 && s.findALine(t, "down-right").j != 0)
+                || (s.findALine(t, "down-left").i != 0 && s.findALine(t, "down-left").j != 0)
+                ) {
+                    list.add(t);
+                }
+            }
+        }
+
+        tuple[] legal_moves = new tuple[list.size()];
+        for (int x = 0; x < list.size(); x++) {
+            legal_moves[x] = list.get(x);
+        }
         return legal_moves;
     }
 
@@ -27,13 +50,12 @@ public class Algo {
 
     /** Generates minimax move from set of legal moves */
     public static tuple genMinimaxMove(State s, boolean isPlayer) {
-      tuple legal_moves[] = genLegalMoves(s);
       int alpha = Integer.MIN_VALUE;
       int beta = Integer.MAX_VALUE;
 
-      int score = minimax(s, 3, isPlayer, alpha, beta);
+      minimax(s, 3, isPlayer, alpha, beta);
 
-      return legal_moves[0];
+      return best_coordinate;
     }
 
     private static int minimax(State curr_state, int depth, boolean isPlayer, int alpha, int beta) {
@@ -112,7 +134,7 @@ public class Algo {
         for (int j = 1; j < 8; j++) {
           coordinate.i = i;
           coordinate.j = j;
-          if (curr_state.getBoard(i,j) == checking_color) { /* Cek apakah warnanya hitam/putih */
+          if (curr_state.getBoardIJ(i,j) == checking_color) { /* Cek apakah warnanya hitam/putih */
             if (is_corner(coordinate)) {
               score += 50;
             }

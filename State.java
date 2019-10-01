@@ -46,6 +46,10 @@ public class State {
         return board;
     }
 
+    public String getBoardIJ(int i, int j) {
+        return board[i][j];
+    }
+
     /** ----- METHODS ----- */
     /** Finds piece's complement from a tuple to a certain direction; returns 0,0 if none */
     public tuple findALine(tuple t, String direction) {
