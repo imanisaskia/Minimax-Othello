@@ -122,6 +122,10 @@ public class State {
         if ((t.i > 0 && t.i < 9) && (t.j > 0 && t.j < 9)) {
             board[t.i][t.j] = Integer.toString(turn);
 
+            if (SKIPPED_ONCE) {
+                SKIPPED_ONCE = false;
+            }
+
             tuple up_end = findALine(t, "up");
             if (up_end.i != 0 && up_end.j != 0) {
                 flipPieces(t, up_end);
