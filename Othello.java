@@ -11,6 +11,7 @@ public class Othello extends JFrame implements ActionListener{
 	public static final int boxCount = 8;
 
 	State gameState;
+	tuple[] legalMoves;
 
 	JLabel scoreWhiteLabel, scoreBlackLabel;
 	int scoreWhite, scoreBlack;
@@ -25,9 +26,7 @@ public class Othello extends JFrame implements ActionListener{
 	JButton buttons[][] = new JButton[boxCount+1][boxCount+1]; //button[0] tidak digunakan
 	Icon iconBlackPiece = new ImageIcon(new ImageIcon("black_piece.png").getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
 	Icon iconWhitePiece = new ImageIcon(new ImageIcon("white_piece.png").getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
-	
-	ImageIcon iconWhite = new ImageIcon(this.getClass().getResource("black_piece.png"));
-	ImageIcon iconBlack = new ImageIcon(this.getClass().getResource("white_piece.png"));
+	Icon iconShadow = new ImageIcon(new ImageIcon("shadow.png").getImage().getScaledInstance(30,30,Image.SCALE_DEFAULT));
 
 	public static void main(String[] args){
 		Othello othello = new Othello();
@@ -161,8 +160,11 @@ public class Othello extends JFrame implements ActionListener{
 				setGameFrame();
 				gameState = new State();
 				updateBoardPiece(gameState.getBoard());
+				legalMoves = Algo.genLegalMoves(gameState);
 				if (bgmode.getSelection().getActionCommand() == "bots"){
 					//fungsi bots vs bots
+				} else {
+					nextMoveHint(legalMoves);
 				}
 			}
 		}
@@ -172,27 +174,32 @@ public class Othello extends JFrame implements ActionListener{
 			int boxNum = Integer.valueOf(act.substring(act.indexOf("n") +1));
 			int iBox = boxNum / 10;
 			int jBox = boxNum % 10;
-			gameState.changeState(new tuple(iBox, jBox));  /** update state from user input */
-			updateBoardPiece(gameState.getBoard()); /** update boardUI */
-			System.out.println(gameState.isGameOver());
-			if (!gameState.isGameOver()){ /** not game over = bot's turn */
-				tuple move;
-				System.out.println("Mode nya : " + bgmode.getSelection().getActionCommand());
-				switch (bgmode.getSelection().getActionCommand()){
-					case ("minimax"):
-						move = Algo.genMinimaxMove(gameState, gameState.getTurn() == 0);
-						System.out.println(Integer.toString(move.i) + Integer.toString(move.j));
-						gameState.changeState(move);
-						updateBoardPiece(gameState.getBoard());
-						break;
-					case ("random"):
-						move = Algo.genRandomMove(gameState);
-						gameState.changeState(move);
-						updateBoardPiece(gameState.getBoard());
-						break;
+			tuple chosen = new tuple(iBox, jBox);
+			
+			if (isMoveAllowed(chosen, legalMoves)){
+				gameState.changeState(new tuple(iBox, jBox));  /** update state from user input */
+				updateBoardPiece(gameState.getBoard()); /** update boardUI */
+				System.out.println(gameState.isGameOver());
+				if (!gameState.isGameOver()){ /** not game over = bot's turn */
+					tuple move;
+					System.out.println("Mode nya : " + bgmode.getSelection().getActionCommand());
+					switch (bgmode.getSelection().getActionCommand()){
+						case ("minimax"):
+							move = Algo.genMinimaxMove(gameState, gameState.getTurn() == 0);
+							System.out.println(Integer.toString(move.i) + Integer.toString(move.j));
+							gameState.changeState(move);
+							updateBoardPiece(gameState.getBoard());
+							
+							break;
+						case ("random"):
+							move = Algo.genRandomMove(gameState);
+							gameState.changeState(move);
+							updateBoardPiece(gameState.getBoard());
+							break;
+					}
+				} else { /** game over */
+					setOver();
 				}
-			} else { /** game over */
-				setOver();
 			}
 			//unenable button gt ?
 		}
@@ -234,6 +241,28 @@ public class Othello extends JFrame implements ActionListener{
 			scoreWhiteLabel.setText("White pieces count : " + Integer.toString(scoreWhite));
 			scoreBlackLabel.setText("Black pieces count : " + Integer.toString(scoreBlack));
 		}
+	}
+
+	public void nextMoveHint(tuple[] legalMoves){
+		System.out.println("test");
+		for (int i = 0; i < legalMoves.length; i++ ){
+			System.out.println("ini i : " + i);
+			tuple box = legalMoves[i];
+			buttons[box.i][box.j].setIcon(iconShadow);
+		}
+	}
+
+	public boolean isMoveAllowed(tuple chosen, tuple[] legalMoves){
+		int i = 0;
+		boolean found = false;
+		while (i < legalMoves.length && !found){
+			if ((chosen.i == legalMoves[i].i) && (chosen.j == legalMoves[i].j)){
+				found = true;
+			} else {
+				i++;
+			}
+		}
+		return found;
 	}
 
 	public void mainBots(){
