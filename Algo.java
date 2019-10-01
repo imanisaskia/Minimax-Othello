@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Algo {
 
-    private static tuple best_coordinate = new tuple(0, 0);   
+    private static tuple best_coordinate = new tuple(0, 0);
 
     /** ----- PRIVATE METHODS ----- */
 
@@ -61,7 +61,7 @@ public class Algo {
       int alpha = Integer.MIN_VALUE;
       int beta = Integer.MAX_VALUE;
 
-      minimax(s, 3, isPlayer, alpha, beta);
+      minimax(s, 2, isPlayer, alpha, beta);
 
       return best_coordinate;
     }
@@ -73,9 +73,11 @@ public class Algo {
         int best_move_score;
 
         if (depth == 0) { /**initiation**/
+          System.out.println("Masuk DEPTH == 0");
           return evaluation(curr_state, isPlayer);
         }
-        else if (isPlayer) { /** opponent's move **/
+        
+        if (isPlayer) { /** opponent's move **/
           best_move_score = Integer.MIN_VALUE;
           for (int i = 0; i < n_legal_moves; i++) {
             move = legal_moves[i];
@@ -86,6 +88,8 @@ public class Algo {
               best_move_score = score;
               setBestCoordinate(move.i, move.j);
             }
+            System.out.println("Masuk isPlayer Minimax");
+            System.out.println("best_move_score = " + best_move_score);
             set_alpha(alpha, best_move_score); /** alpha beta pruning */
             if (beta <= alpha) {
               break; /** pruning */
@@ -103,6 +107,8 @@ public class Algo {
               best_move_score = score;
               setBestCoordinate(move.i, move.j);
             }
+            System.out.println("Masuk NOT isPlayer Minimax");
+            System.out.println("best_move_score = " + best_move_score);
             set_beta(beta, best_move_score); /** alpha beta pruning */
             if (beta <= alpha) {
               break; /** pruning */
@@ -142,7 +148,7 @@ public class Algo {
         for (int j = 1; j <= 8; j++) {
           coordinate.i = i;
           coordinate.j = j;
-          if (curr_state.getBoardIJ(i,j) == checking_color) { /* Cek apakah warnanya hitam/putih */
+          if (curr_state.getBoardIJ(i,j).equals(checking_color)) {  /* Cek apakah warnanya hitam/putih */
             if (is_corner(coordinate)) {
               score += 50;
             }
